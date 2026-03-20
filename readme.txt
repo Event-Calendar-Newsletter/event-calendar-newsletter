@@ -4,7 +4,7 @@ Donate link: https://eventcalendarnewsletter.com/
 Tags: Event Calendar Newsletter, WordPress events calendar, WordPress event calendar, The Events Calendar, All-in-One Event Calendar
 Requires at least: 5.8
 Tested up to: 6.9
-Stable tag: 2.17
+Stable tag: 2.17.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -48,6 +48,7 @@ Events Calendar Newsletter Pro supports all of the above-mentioned event calenda
 * Calendarize it!
 * Eventum (by Templatic)
 * EventPrime
+* My Calendar - Accessible Event Manager
 
 **Event Calendar Newsletter Main Features**
 
@@ -98,6 +99,9 @@ If you don't already have your event calendar plugin installed and configured, y
 4. Choose which events to include by how far in the future, Pro version can filter by categories or tags
 
 == Changelog ==
+
+= 2.17.1 =
+* Added supported calendar detection and instructions update
 
 = 2.17 =
 * Adding "location names" option for The Events Calendar PRO

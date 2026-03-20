@@ -1,0 +1,23 @@
+{
+  "name": "events-calendar-newsletter",
+  "version": "2.17.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "bh-dev",
+    "build": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brianhogg/event-calendar-newsletter"
+  },
+  "author": "Event Calendar Newsletter",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/brianhogg/event-calendar-newsletter/issues"
+  },
+  "homepage": "https://github.com/brianhogg/event-calendar-newsletter#readme",
+  "devDependencies": {
+    "@brianhogg/dev": "git+https://github.com/brianhogg/dev.git#trunk"
+  }
+}

@@ -22,5 +22,46 @@
         "psr-4": {
             "Tribe\\Events\\Test\\Factories\\": "tests/_support/Factories"
         }
+    },
+    "archive": {
+        "exclude": [
+            ".*",
+            "*.lock",
+            "*.xml",
+            "*.xml.dist",
+            "*.config.js",
+
+            "AGENTS.md",
+
+            "composer.json",
+            "docker-compose.yml",
+            "lerna.json",
+            "package.json",
+            "package-lock.json",
+            "README.md",
+
+            "/assets/scss",
+
+            "_private",
+            "archive",
+            "docs",
+            "gulpfile.js",
+            "node_modules",
+            "packages",
+            "tests",
+            "tmp",
+            "i18n",
+            "wordpress",
+            "**.env.*",
+            "*.eslint*",
+            "**.php_cs.php",
+            "**codeception.dist.yml",
+            "webpack.config.js",
+            ".github",
+            ".distignore",
+            "vendor",
+            "core/tailwind.config.js",
+            "core/languages"
+        ]
     }
 }
