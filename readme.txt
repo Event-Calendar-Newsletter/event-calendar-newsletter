@@ -100,6 +100,9 @@ If you don't already have your event calendar plugin installed and configured, y
 
 == Changelog ==
 
+= 2.17.1 =
+* Added supported calendar detection and instructions update
+
 = 2.17 =
 * Adding "location names" option for The Events Calendar PRO
 * Additional error handling in case the timezone is incorrect, or there's some issue creating the datetime object vs. strtotime.
