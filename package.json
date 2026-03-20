@@ -1,0 +1,23 @@
+{
+  "name": "events-calendar-newsletter-pro",
+  "version": "3.6.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "bh-dev",
+    "build": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brianhogg/event-calendar-newsletter-pro"
+  },
+  "author": "Event Calendar Newsletter",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/brianhogg/event-calendar-newsletter-pro/issues"
+  },
+  "homepage": "https://github.com/brianhogg/event-calendar-newsletter-pro#readme",
+  "devDependencies": {
+    "@brianhogg/dev": "git+https://github.com/brianhogg/dev.git#trunk"
+  }
+}

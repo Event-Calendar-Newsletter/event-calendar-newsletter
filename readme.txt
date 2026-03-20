@@ -48,6 +48,7 @@ Events Calendar Newsletter Pro supports all of the above-mentioned event calenda
 * Calendarize it!
 * Eventum (by Templatic)
 * EventPrime
+* My Calendar - Accessible Event Manager
 
 **Event Calendar Newsletter Main Features**
 
