@@ -115,6 +115,10 @@ if ( ! function_exists( 'ecn_available_pro_calendars' ) ) {
             $calendars[] = 'EventPrime';
         }
 
+        if ( function_exists( 'my_calendar_get_events' ) ) {
+            $calendars[] = 'My Calendar';
+        }
+
         return $calendars;
     }
 }

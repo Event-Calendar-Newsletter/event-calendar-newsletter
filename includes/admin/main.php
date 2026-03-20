@@ -10,8 +10,8 @@
                     <p><strong><?php echo esc_html( $calendar ); ?></strong></p>
                 <?php endforeach; ?>
                 <p>Not all calendars are supported in the free version.</p>
-                <p>You can either install a calendar supported with the free version (like The Events Calendar by Modern Tribe), or upgrade to pro. This will allow support for all calendars, along with other features like automatic sending with Mailchimp, Mailpoet, and more.</p>
-                <p><?php echo sprintf( esc_html__( '%sLearn More About Event Calendar Newsletter Pro%s', 'event-calendar-newsletter' ), '<a class="ecs-button upgrade" target="_blank" href="https://eventcalendarnewsletter.com/?utm_source=plugin&utm_medium=link&utm_campaign=ecn-pro-only-calendar&utm_content=description">', '</a>' ); ?></p>            </div>
+                <p>You can either install a calendar supported with the free version (like The Events Calendar by StellarWP, formerly Modern Tribe), or upgrade to pro. This will allow support for all calendars, along with other features like additional event filtering and time ranges. It also enables automatic sending of campaigns with Mailchimp, Mailpoet, and more.</p>
+                <p><?php echo sprintf( esc_html__( '%sLearn More About Event Calendar Newsletter Pro%s', 'event-calendar-newsletter' ), '<a class="ecs-button upgrade" target="_blank" href="https://eventcalendarnewsletter.com/features/?utm_source=plugin&utm_medium=link&utm_campaign=ecn-pro-only-calendar&utm_content=description">', '</a>' ); ?></p>            </div>
             </div>
         <?php else: ?>
           <div id="no-supported-calendars">
@@ -29,7 +29,7 @@
             <h1><?php echo esc_html__( 'Preview of Event Calendar Newsletter', 'event-calendar-newsletter' ); ?></h1>
             <iframe width="560" height="315" src="https://www.youtube.com/embed/rTwus0wTzX4" frameborder="0" allowfullscreen></iframe>
               <p>
-                  <?php echo sprintf( esc_html( __( 'Still need help?  View %sfull instructions for setting up a supported calendar%s or %sreach out to support%s, we are here to help :)' ) ), '<a target="_blank" href="https://eventcalendarnewsletter.com/docs/set-event-calendar-wordpress-site/">', '</a>', '<a href="https://wordpress.org/support/plugin/event-calendar-newsletter/#new-post" target="_blank">', '</a>' ); ?>
+                  <?php echo sprintf( esc_html( __( 'Still need help?  View %sfull instructions for setting up a supported calendar%s or %sreach out to support%s, we are here to help :)' ) ), '<a target="_blank" href="https://eventcalendarnewsletter.com/docs/set-event-calendar-wordpress-site/">', '</a>', '<a href="https://eventcalendarnewsletter.com/contact/" target="_blank">', '</a>' ); ?>
               </p>
           </div>
       <?php endif; ?>
