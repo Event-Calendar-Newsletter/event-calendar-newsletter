@@ -119,6 +119,10 @@ if ( ! function_exists( 'ecn_available_pro_calendars' ) ) {
             $calendars[] = 'My Calendar';
         }
 
+        if ( function_exists( 'sugar_calendar' ) ) {
+            $calendars[] = 'Sugar Calendar';
+        }
+
         return $calendars;
     }
 }
