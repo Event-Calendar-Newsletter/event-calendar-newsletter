@@ -4,12 +4,13 @@ Donate link: https://eventcalendarnewsletter.com/
 Tags: Event Calendar Newsletter, WordPress events calendar, WordPress event calendar, The Events Calendar, All-in-One Event Calendar
 Requires at least: 5.8
 Tested up to: 6.9
-Stable tag: 2.17.1
+Stable tag: 2.17.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Stop manually copying the events you’re promoting from your WordPress events calendar!
+
 
 == Description ==
 
@@ -76,12 +77,13 @@ Events Calendar Newsletter Pro supports all of the above-mentioned event calenda
 
 [Check out Event Calendar Newsletter Pro here.](https://eventcalendarnewsletter.com/?utm_source=wordpress.org&utm_medium=link&utm_campaign=event-cal-readme&utm_content=description)
 
+
 == Installation ==
 
 You can either search for Event Calendar Newsletter in the Plugins --> Add New area, or:
 
 1. Go to Plugins --> Add New
-2. Select the Upload option, then Choose File...
+2. Click the Upload option, then Choose File...
 3. In the pop-up select the zip file downloaded from this plugin page
 4. Follow the instructions after the upload completes
 5. Go to Event Calendar Newsletter and complete the form
@@ -92,6 +94,7 @@ If you don't already have your event calendar plugin installed and configured, y
 * [Events Manager](https://wordpress.org/plugins/events-manager/)
 * [Simple Calendar (aka Google Calendar Events)](https://wordpress.org/plugins/google-calendar-events/)
 
+
 == Screenshots ==
 
 1. Select the calendar where you'd like to pull your events from, and define the format.
@@ -99,17 +102,22 @@ If you don't already have your event calendar plugin installed and configured, y
 3. HTML output can be used in your newsletter instead.
 4. Choose which events to include by how far in the future, Pro version can filter by categories or tags
 
+
 == Changelog ==
 
-= 2.17.1 =
-* Added supported calendar detection and instructions update
+= v2.17.2 - 2026-08-23 =
 
-= 2.17 =
-* Adding "location names" option for The Events Calendar PRO
-* Additional error handling in case the timezone is incorrect, or there's some issue creating the datetime object vs. strtotime.
-* Fix if using UTC date/time zone.
-* Avoid overwriting the saved options ($data) array in the loop.
-* Avoid warning if replacement output is null
+##### New Features
+
++ Adding note about Sugar Calendar support.
+
+
+= v2.17.1 - 2026-03-20 =
+
+##### Updates and Enhancements
+
++ Added supported calendar detection and instructions update.
+
 
 = 2.16.2 =
 * Avoid showing marketing opt-in incorrectly
