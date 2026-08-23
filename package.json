@@ -1,11 +1,12 @@
 {
   "name": "events-calendar-newsletter",
-  "version": "2.17.1",
+  "version": "2.17.2",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "bh-dev",
-    "build": ""
+    "build": "npm run build:readme",
+    "build:readme": "bh-dev readme --changelog-length 100"
   },
   "repository": {
     "type": "git",
