@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "bh-dev",
     "build": "npm run build:readme",
-    "build:readme": "bh-dev readme --read-more https://github.com/brianhogg/event-calendar-newsletter/blob/master/CHANGELOG.md"
+    "build:readme": "bh-dev readme --changelog-length 100"
   },
   "repository": {
     "type": "git",
