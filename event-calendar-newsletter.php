@@ -127,6 +127,10 @@ if ( ! function_exists( 'ecn_available_pro_calendars' ) ) {
             $calendars[] = 'Sugar Calendar';
         }
 
+        if ( defined( 'EVENTKOI_VERSION' ) ) {
+            $calendars[] = 'EventKoi';
+        }
+
         return $calendars;
     }
 }
