@@ -950,13 +950,13 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
             $form['heading'] = __( 'Sorry to see you go', 'event-calendar-newsletter' );
             $form['body'] = __( 'Before you deactivate the plugin, would you quickly give us your reason for doing so?', 'event-calendar-newsletter' );
             $form['options'] = [
-                __( 'Set up is too difficult', 'event-calendar-newsletter' ),
-                __( 'Lack of documentation', 'event-calendar-newsletter' ),
-                __( 'Not the features I wanted', 'event-calendar-newsletter' ),
-                __( 'Found a better plugin', 'event-calendar-newsletter' ),
-                __( 'Installed by mistake', 'event-calendar-newsletter' ),
-                __( 'Only required temporarily', 'event-calendar-newsletter' ),
-                __( 'Didn\'t work', 'event-calendar-newsletter' ),
+                'Set up is too difficult' => __( 'Set up is too difficult', 'event-calendar-newsletter' ),
+                'Lack of documentation' => __( 'Lack of documentation', 'event-calendar-newsletter' ),
+                'Not the features I wanted' => __( 'Not the features I wanted', 'event-calendar-newsletter' ),
+                'Found a better plugin' => __( 'Found a better plugin', 'event-calendar-newsletter' ),
+                'Installed by mistake' => __( 'Installed by mistake', 'event-calendar-newsletter' ),
+                'Only required temporarily' => __( 'Only required temporarily', 'event-calendar-newsletter' ),
+                'Didn\'t work' => __( 'Didn\'t work', 'event-calendar-newsletter' ),
             ];
             $form['details'] = __( 'Details (optional)', 'event-calendar-newsletter' );
 
@@ -997,8 +997,10 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
             if ( is_array( $form['options'] ) ) {
                 $html .= '<div class="put-goodbye-options"><p>';
 
-                foreach ( $form['options'] as $option ) {
-                    $html .= '<input type="checkbox" name="put-goodbye-options[]" id="' . str_replace( ' ', '', esc_attr( $option ) ) . '" value="' . esc_attr( $option ) . '"> <label for="' . str_replace( ' ', '', esc_attr( $option ) ) . '">' . esc_attr( $option ) . '</label><br>';
+                foreach ( $form['options'] as $key => $label ) {
+                    $value = is_int( $key ) ? $label : $key;
+                    $id = str_replace( ' ', '', esc_attr( $value ) );
+                    $html .= '<input type="checkbox" name="put-goodbye-options[]" id="' . $id . '" value="' . esc_attr( $value ) . '"> <label for="' . $id . '">' . esc_html( $label ) . '</label><br>';
                 }
                 $html .= '</p><label for="put-goodbye-reasons">' . esc_html( $form['details'] ) . '</label><textarea name="put-goodbye-reasons" id="put-goodbye-reasons" rows="2" style="width:100%"></textarea>';
                 $html .= '</div><!-- .put-goodbye-options -->';
@@ -1014,6 +1016,7 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
 					left: 0;
 					width: 100%;
 					height: 100%;
+					z-index: 100000;
 				}
 				.put-goodbye-form-wrapper {
 					position: relative;
@@ -1022,17 +1025,25 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
 				}
 				.put-form-active .put-goodbye-form-wrapper {
 					display: block;
+					z-index: 100001;
 				}
 				.put-goodbye-form {
 					display: none;
 				}
 				.put-form-active .put-goodbye-form {
-					position: absolute;
-				    bottom: 30px;
-				    left: 0;
-					max-width: 400px;
-				    background: #fff;
+					position: fixed;
+					top: 50%;
+					left: 50%;
+					bottom: auto;
+					transform: translate( -50%, -50% );
+					z-index: 100001;
+					width: 400px;
+					max-width: calc( 100vw - 48px );
+					max-height: calc( 100vh - 64px );
+					overflow-y: auto;
+					background: #fff;
 					white-space: normal;
+					box-shadow: 0 5px 15px rgba( 0, 0, 0, .3 );
 				}
 				.put-goodbye-form-head {
 					background: #0073aa;
@@ -1062,8 +1073,9 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
 						// We'll send the user to this deactivation link when they've completed or dismissed the form
 						var url = document.getElementById("put-goodbye-link-<?php echo esc_attr( $this->plugin_name ); ?>");
 						$('body').toggleClass('put-form-active');
-						$("#put-goodbye-form-<?php echo esc_attr( $this->plugin_name ); ?>").fadeIn();
-						$("#put-goodbye-form-<?php echo esc_attr( $this->plugin_name ); ?>").html( '<?php echo $html; ?>' + '<div class="put-goodbye-form-footer"><p><a id="put-submit-form" class="button primary" href="#"><?php _e( 'Submit and Deactivate', 'event-calendar-newsletter' ); ?></a>&nbsp;<a class="secondary button" href="'+url+'"><?php _e( 'Just Deactivate', 'event-calendar-newsletter' ); ?></a></p></div>');
+						var $form = $("#put-goodbye-form-<?php echo esc_attr( $this->plugin_name ); ?>").appendTo('body');
+						$form.fadeIn();
+						$form.html( '<?php echo $html; ?>' + '<div class="put-goodbye-form-footer"><p><a id="put-submit-form" class="button primary" href="#"><?php _e( 'Submit and Deactivate', 'event-calendar-newsletter' ); ?></a>&nbsp;<a class="secondary button" href="'+url+'"><?php _e( 'Just Deactivate', 'event-calendar-newsletter' ); ?></a></p></div>');
 						$('#put-submit-form').on('click', function(e){
 							// As soon as we click, the body of the form should disappear
 							$("#put-goodbye-form-<?php echo esc_attr( $this->plugin_name ); ?> .put-goodbye-form-body").fadeOut();
