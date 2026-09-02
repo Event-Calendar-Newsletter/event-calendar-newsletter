@@ -1,6 +1,22 @@
 Changelog
 =========
 
+v2.17.3 - 2026-09-02
+--------------------
+
+##### New Features
+
++ Adding note about EventKoi support.
+
+##### Updates and Enhancements
+
++ Avoid translations of product name and deactivation reason keys.
+
+##### Bug Fixes
+
++ Fixed position of deactivation survey modal on short plugins list.
+
+
 v2.17.2 - 2026-08-23
 --------------------
 
