@@ -1,0 +1,3 @@
+significance: patch
+type: changed
+entry: Avoid translations of product name and deactivation reason keys.

@@ -1,5 +1,5 @@
 <div class="wrap">
-    <h2><?php echo esc_html( apply_filters( 'ecn_settings_title', _x( 'Event Calendar Newsletter', 'Settings title', 'event-calendar-newsletter' ) ) ); ?></h2>
+    <h2><?php echo esc_html( apply_filters( 'ecn_settings_title', 'Event Calendar Newsletter' ) ); ?></h2>
 	<?php do_action( 'ecn_after_settings_title' ); ?>
     <?php if ( ! $data['available_plugins'] ): ?>
       <?php $calendars = ecn_available_pro_calendars(); ?>
