@@ -43,6 +43,7 @@ require_once __DIR__ . '/includes/ecncalendarevent.class.php';
 require_once __DIR__ . '/includes/ecncalendarfeed.class.php';
 require_once __DIR__ . '/includes/ecncalendarfeedfactory.class.php';
 require_once __DIR__ . '/includes/ecnsettings.class.php';
+require_once __DIR__ . '/includes/abilities.php';
 
 // Supported plugins
 require_once __DIR__ . '/includes/ecncalendarfeedajaxcalendar.class.php';
