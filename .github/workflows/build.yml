@@ -1,0 +1,78 @@
+###
+#
+# Build check: lints PHP on the oldest and newest supported versions, runs the
+# build, and checks the generated readme.txt matches the plugin version.
+#
+# Runs on every pull request. It needs no secrets.
+#
+###
+name: Build
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - dev
+      - master
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ 'pull_request' == github.event_name && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-24.04
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # The plugin header requires PHP 7.4, so lint on 7.4 and on the newest PHP.
+      - name: Setup PHP 7.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: none
+
+      - name: Lint PHP 7.4
+        run: git ls-files -z '*.php' ':!tests/' | xargs -0 -n 1 php -l
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Lint PHP 8.4
+        run: git ls-files -z '*.php' ':!tests/' | xargs -0 -n 1 php -l
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Check build output
+        run: |
+          if [ ! -s readme.txt ]; then
+            echo "::error file=readme.txt::readme.txt is missing or empty after npm run build"
+            exit 1
+          fi
+          version=$(sed -n 's/^ \* Version: *//p' event-calendar-newsletter.php | head -1)
+          stable=$(sed -n 's/^Stable tag: *//p' readme.txt | head -1)
+          if [ "$version" != "$stable" ]; then
+            echo "::error file=readme.txt::Stable tag ($stable) does not match the plugin Version ($version)"
+            exit 1
+          fi
+          echo "readme.txt generated for version $version"
