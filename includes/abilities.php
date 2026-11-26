@@ -191,6 +191,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
             'permission_callback' => 'ecn_abilities_user_can_manage',
             'meta' => [
                 'show_in_rest' => true,
+                'mcp' => [ 'public' => true ],
                 'annotations' => [
                     'readonly' => true,
                     'destructive' => false,
@@ -238,6 +239,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
             'permission_callback' => 'ecn_abilities_user_can_manage',
             'meta' => [
                 'show_in_rest' => true,
+                'mcp' => [ 'public' => true ],
                 'annotations' => [
                     'readonly' => true,
                     'destructive' => false,
@@ -267,6 +269,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
             'permission_callback' => 'ecn_abilities_user_can_manage',
             'meta' => [
                 'show_in_rest' => true,
+                'mcp' => [ 'public' => true ],
                 'annotations' => [
                     'readonly' => true,
                     'destructive' => false,

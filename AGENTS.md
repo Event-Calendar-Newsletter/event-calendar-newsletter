@@ -10,7 +10,7 @@ Event Calendar Newsletter Pro (private repo `Event-Calendar-Newsletter/event-cal
 
 ## Using the plugin from an AI agent (WordPress Abilities API)
 
-On WordPress 6.9+ the plugin registers abilities in the `event-calendar-newsletter` category ([`includes/abilities.php`](includes/abilities.php)). They are available to PHP (`wp_get_ability()`), to the REST API under `/wp-json/wp-abilities/v1/abilities`, and to MCP clients through the WordPress MCP Adapter. They need the same capability as the admin page (`add_users`, or `ecn_admin` once roles are saved on the Settings page; filtered by `ecn_admin_capability`).
+On WordPress 6.9+ the plugin registers abilities in the `event-calendar-newsletter` category ([`includes/abilities.php`](includes/abilities.php)). They are available to PHP (`wp_get_ability()`), to the REST API under `/wp-json/wp-abilities/v1/abilities`, and to MCP clients through the WordPress MCP Adapter (they set `meta.mcp.public`, so the adapter's default server lists them; only read-only abilities should be public). They need the same capability as the admin page (`add_users`, or `ecn_admin` once roles are saved on the Settings page; filtered by `ecn_admin_capability`).
 
 | Ability | What it does |
 | --- | --- |
