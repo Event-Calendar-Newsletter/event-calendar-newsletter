@@ -37,6 +37,7 @@ Events Calendar Newsletter Pro supports all of the above-mentioned event calenda
 * EventPrime
 * Sugar Calendar
 * My Calendar - Accessible Event Manager
+* EventKoi
 
 **Event Calendar Newsletter Main Features**
 

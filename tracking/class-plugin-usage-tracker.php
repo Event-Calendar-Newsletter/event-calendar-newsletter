@@ -95,6 +95,8 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
         }
 
         public function init() {
+            $this->reset_email_consent();
+
             // Check marketing
             if ( $this->marketing == 3 ) {
                 $this->set_can_collect_email( true, $this->plugin_name );
@@ -275,6 +277,12 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
             // Collect the email if the correct option has been set
             if ( $this->get_can_collect_email() ) {
                 $body['email'] = $this->get_admin_email();
+
+                // Unix time the admin clicked "Yes Please", sent only for explicit consent
+                $consent = get_option( 'wisdom_marketing_consent', [] );
+                if ( isset( $consent[$this->plugin_name] ) ) {
+                    $body['marketing_consent'] = $consent[$this->plugin_name];
+                }
             }
             $body['marketing_method'] = $this->marketing;
 
@@ -715,6 +723,26 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
         }
 
         /**
+         * Clear email consent stored before "No Thank You" was handled correctly, once per plugin
+         *
+         * Earlier versions stored consent for both "Yes Please" and "No Thank You", so a stored
+         * consent cannot be trusted and usage pings stop including the admin email.
+         *
+         * @since 2.18.0
+         */
+        public function reset_email_consent() {
+            $reset = get_option( 'wisdom_collect_email_reset', [] );
+
+            if ( isset( $reset[$this->plugin_name] ) ) {
+                return;
+            }
+
+            $this->set_can_collect_email( false, $this->plugin_name );
+            $reset[$this->plugin_name] = time();
+            update_option( 'wisdom_collect_email_reset', $reset );
+        }
+
+        /**
          * Get the correct email address to use
          *
          * @since 1.1.2
@@ -838,11 +866,14 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
                     // Option 2 enables a second notice that fires after the user opts in to tracking
                     $yes_args['marketing'] = 'yes';
                 }
-                $url_yes = add_query_arg( $yes_args );
+                // Start from the current URL without answers to earlier notices, so an answer
+                // given for another plugin is not carried into this plugin's links.
+                $base_url = remove_query_arg( [ 'plugin', 'plugin_action', 'marketing', 'marketing_optin' ] );
+                $url_yes = add_query_arg( $yes_args, $base_url );
                 $url_no = add_query_arg( [
                     'plugin' => $this->plugin_name,
                     'plugin_action' => 'no',
-                ] );
+                ], $base_url );
 
                 // Decide on notice text
                 if ( $this->marketing != 1 ) {
@@ -861,12 +892,12 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
                 // And we allow you to filter the text anyway
                 $notice_text = apply_filters( 'wisdom_notice_text_' . esc_attr( $this->plugin_name ), $notice_text ); ?>
 
-				<div class="notice notice-info updated put-dismiss-notice">
+				<div class="notice notice-info put-dismiss-notice">
 					<p><?php echo '<strong>' . esc_html( $plugin_name ) . '</strong>'; ?></p>
 					<p><?php echo esc_html( $notice_text ); ?></p>
 					<p>
-						<a href="<?php echo esc_url( $url_yes ); ?>" class="button-secondary"><?php _e( 'Allow', 'event-calendar-newsletter' ); ?></a>
-						<a href="<?php echo esc_url( $url_no ); ?>" class="button-secondary"><?php _e( 'Do Not Allow', 'event-calendar-newsletter' ); ?></a>
+						<a href="<?php echo esc_url( $url_yes ); ?>" class="button button-primary"><?php _e( 'Allow', 'event-calendar-newsletter' ); ?></a>
+						<a href="<?php echo esc_url( $url_no ); ?>" class="button"><?php _e( 'Do Not Allow', 'event-calendar-newsletter' ); ?></a>
 					</p>
 				</div>
 			<?php
@@ -881,38 +912,62 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
          */
         public function marketing_notice() {
             // Check if user has opted in to marketing
-            if ( isset( $_GET['marketing_optin'] ) ) {
-                // Set marketing optin
-                $this->set_can_collect_email( sanitize_text_field( $_GET['marketing_optin'] ), $this->plugin_name );
-                // Do tracking
-                $this->do_tracking( true );
+            // Only the notice for this plugin records its answer, and only an explicit "yes" is consent.
+            if ( isset( $_GET['marketing_optin'], $_GET['plugin'] ) ) {
+                if ( $_GET['plugin'] === $this->plugin_name ) {
+                    $consented = 'yes' === $_GET['marketing_optin'];
+                    $this->set_can_collect_email( $consented, $this->plugin_name );
+
+                    // Record when the admin said yes, so the tracking server can tell explicit consent apart.
+                    $consent = get_option( 'wisdom_marketing_consent', [] );
+                    if ( $consented ) {
+                        $consent[$this->plugin_name] = time();
+                    } else {
+                        unset( $consent[$this->plugin_name] );
+                    }
+                    update_option( 'wisdom_marketing_consent', $consent );
+
+                    // Do tracking
+                    $this->do_tracking( true );
+                }
             } elseif ( isset( $_GET['marketing'], $_GET['plugin'] ) && $_GET['marketing'] === 'yes' && $_GET['plugin'] === $this->plugin_name ) {
                 // Display the notice requesting permission to collect email address
                 // Retrieve current plugin information
                 $plugin = $this->plugin_data();
                 $plugin_name = $plugin['Name'];
 
+                $base_url = remove_query_arg( [ 'plugin', 'plugin_action', 'marketing', 'marketing_optin' ] );
                 $url_yes = add_query_arg( [
                     'plugin' => $this->plugin_name,
                     'marketing_optin' => 'yes',
-                ] );
+                ], $base_url );
                 $url_no = add_query_arg( [
                     'plugin' => $this->plugin_name,
                     'marketing_optin' => 'no',
-                ] );
+                ], $base_url );
 
-                $marketing_text = sprintf(
-                    __( 'Thank you for opting in to tracking. Would you like to receive occasional news about this %s, including details of new features and special offers?', 'event-calendar-newsletter' ),
-                    $this->what_am_i
-                );
+                $marketing_text = __( 'Would you like occasional emails with tips, new features and special offers, including discounts on our Pro plugins?', 'event-calendar-newsletter' );
                 $marketing_text = apply_filters( 'wisdom_marketing_text_' . esc_attr( $this->plugin_name ), $marketing_text ); ?>
 
-				<div class="notice notice-info updated put-dismiss-notice">
+				<div class="notice notice-info put-dismiss-notice">
 					<p><?php echo '<strong>' . esc_html( $plugin_name ) . '</strong>'; ?></p>
 					<p><?php echo esc_html( $marketing_text ); ?></p>
 					<p>
-						<a href="<?php echo esc_url( $url_yes ); ?>" data-putnotice="yes" class="button-secondary"><?php _e( 'Yes Please', 'event-calendar-newsletter' ); ?></a>
-						<a href="<?php echo esc_url( $url_no ); ?>" data-putnotice="no" class="button-secondary"><?php _e( 'No Thank You', 'event-calendar-newsletter' ); ?></a>
+						<a href="<?php echo esc_url( $url_yes ); ?>" data-putnotice="yes" class="button button-primary"><?php _e( 'Yes Please', 'event-calendar-newsletter' ); ?></a>
+						<a href="<?php echo esc_url( $url_no ); ?>" data-putnotice="no" class="button"><?php _e( 'No Thank You', 'event-calendar-newsletter' ); ?></a>
+					</p>
+					<p class="description">
+						<?php
+						printf(
+							/* translators: 1: email address, 2: mailing address, 3: contact email address, 4: opening privacy policy link tag, 5: closing link tag */
+							esc_html__( 'Sent to %1$s by Event Calendar Newsletter (7184948 Canada Inc), %2$s, %3$s. Unsubscribe at any time from any email. %4$sPrivacy policy%5$s', 'event-calendar-newsletter' ),
+							'<strong>' . esc_html( $this->get_admin_email() ? $this->get_admin_email() : wp_get_current_user()->user_email ) . '</strong>',
+							'222 Main Street East, North Bay, ON, P1B 1B1, Canada',
+							'info@eventcalendarnewsletter.com',
+							'<a href="https://eventcalendarnewsletter.com/privacy/" target="_blank">',
+							'</a>'
+						);
+						?>
 					</p>
 				</div>
 				<?php
@@ -950,13 +1005,13 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
             $form['heading'] = __( 'Sorry to see you go', 'event-calendar-newsletter' );
             $form['body'] = __( 'Before you deactivate the plugin, would you quickly give us your reason for doing so?', 'event-calendar-newsletter' );
             $form['options'] = [
-                __( 'Set up is too difficult', 'event-calendar-newsletter' ),
-                __( 'Lack of documentation', 'event-calendar-newsletter' ),
-                __( 'Not the features I wanted', 'event-calendar-newsletter' ),
-                __( 'Found a better plugin', 'event-calendar-newsletter' ),
-                __( 'Installed by mistake', 'event-calendar-newsletter' ),
-                __( 'Only required temporarily', 'event-calendar-newsletter' ),
-                __( 'Didn\'t work', 'event-calendar-newsletter' ),
+                'Set up is too difficult' => __( 'Set up is too difficult', 'event-calendar-newsletter' ),
+                'Lack of documentation' => __( 'Lack of documentation', 'event-calendar-newsletter' ),
+                'Not the features I wanted' => __( 'Not the features I wanted', 'event-calendar-newsletter' ),
+                'Found a better plugin' => __( 'Found a better plugin', 'event-calendar-newsletter' ),
+                'Installed by mistake' => __( 'Installed by mistake', 'event-calendar-newsletter' ),
+                'Only required temporarily' => __( 'Only required temporarily', 'event-calendar-newsletter' ),
+                'Didn\'t work' => __( 'Didn\'t work', 'event-calendar-newsletter' ),
             ];
             $form['details'] = __( 'Details (optional)', 'event-calendar-newsletter' );
 
@@ -997,8 +1052,10 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
             if ( is_array( $form['options'] ) ) {
                 $html .= '<div class="put-goodbye-options"><p>';
 
-                foreach ( $form['options'] as $option ) {
-                    $html .= '<input type="checkbox" name="put-goodbye-options[]" id="' . str_replace( ' ', '', esc_attr( $option ) ) . '" value="' . esc_attr( $option ) . '"> <label for="' . str_replace( ' ', '', esc_attr( $option ) ) . '">' . esc_attr( $option ) . '</label><br>';
+                foreach ( $form['options'] as $key => $label ) {
+                    $value = is_int( $key ) ? $label : $key;
+                    $id = str_replace( ' ', '', esc_attr( $value ) );
+                    $html .= '<input type="checkbox" name="put-goodbye-options[]" id="' . $id . '" value="' . esc_attr( $value ) . '"> <label for="' . $id . '">' . esc_html( $label ) . '</label><br>';
                 }
                 $html .= '</p><label for="put-goodbye-reasons">' . esc_html( $form['details'] ) . '</label><textarea name="put-goodbye-reasons" id="put-goodbye-reasons" rows="2" style="width:100%"></textarea>';
                 $html .= '</div><!-- .put-goodbye-options -->';
@@ -1014,6 +1071,7 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
 					left: 0;
 					width: 100%;
 					height: 100%;
+					z-index: 100000;
 				}
 				.put-goodbye-form-wrapper {
 					position: relative;
@@ -1022,17 +1080,25 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
 				}
 				.put-form-active .put-goodbye-form-wrapper {
 					display: block;
+					z-index: 100001;
 				}
 				.put-goodbye-form {
 					display: none;
 				}
 				.put-form-active .put-goodbye-form {
-					position: absolute;
-				    bottom: 30px;
-				    left: 0;
-					max-width: 400px;
-				    background: #fff;
+					position: fixed;
+					top: 50%;
+					left: 50%;
+					bottom: auto;
+					transform: translate( -50%, -50% );
+					z-index: 100001;
+					width: 400px;
+					max-width: calc( 100vw - 48px );
+					max-height: calc( 100vh - 64px );
+					overflow-y: auto;
+					background: #fff;
 					white-space: normal;
+					box-shadow: 0 5px 15px rgba( 0, 0, 0, .3 );
 				}
 				.put-goodbye-form-head {
 					background: #0073aa;
@@ -1062,8 +1128,9 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
 						// We'll send the user to this deactivation link when they've completed or dismissed the form
 						var url = document.getElementById("put-goodbye-link-<?php echo esc_attr( $this->plugin_name ); ?>");
 						$('body').toggleClass('put-form-active');
-						$("#put-goodbye-form-<?php echo esc_attr( $this->plugin_name ); ?>").fadeIn();
-						$("#put-goodbye-form-<?php echo esc_attr( $this->plugin_name ); ?>").html( '<?php echo $html; ?>' + '<div class="put-goodbye-form-footer"><p><a id="put-submit-form" class="button primary" href="#"><?php _e( 'Submit and Deactivate', 'event-calendar-newsletter' ); ?></a>&nbsp;<a class="secondary button" href="'+url+'"><?php _e( 'Just Deactivate', 'event-calendar-newsletter' ); ?></a></p></div>');
+						var $form = $("#put-goodbye-form-<?php echo esc_attr( $this->plugin_name ); ?>").appendTo('body');
+						$form.fadeIn();
+						$form.html( '<?php echo $html; ?>' + '<div class="put-goodbye-form-footer"><p><a id="put-submit-form" class="button primary" href="#"><?php _e( 'Submit and Deactivate', 'event-calendar-newsletter' ); ?></a>&nbsp;<a class="secondary button" href="'+url+'"><?php _e( 'Just Deactivate', 'event-calendar-newsletter' ); ?></a></p></div>');
 						$('#put-submit-form').on('click', function(e){
 							// As soon as we click, the body of the form should disappear
 							$("#put-goodbye-form-<?php echo esc_attr( $this->plugin_name ); ?> .put-goodbye-form-body").fadeOut();

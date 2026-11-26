@@ -65,7 +65,7 @@ if ( ! class_exists( 'ECNAdmin' ) ) {
         }
 
         public function admin_menu() {
-            add_menu_page( __( 'Event Calendar Newsletter', 'event-calendar-newsletter' ), __( 'Event Calendar Newsletter', 'event-calendar-newsletter' ), apply_filters( 'ecn_admin_capability', 'add_users' ), 'eventcalendarnewsletter', [ &$this, 'admin_page' ], null, 41 );
+            add_menu_page( 'Event Calendar Newsletter', 'Event Calendar Newsletter', apply_filters( 'ecn_admin_capability', 'add_users' ), 'eventcalendarnewsletter', [ &$this, 'admin_page' ], null, 41 );
         }
 
         public function save_templates_notice() {

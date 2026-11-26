@@ -3,14 +3,14 @@
  * Plugin Name: Event Calendar Newsletter
  * Plugin URI: https://eventcalendarnewsletter.com/
  * Description: Easily put events from your WordPress event calendar inside of a newsletter. Spend less time promoting your events!
- * Version: 2.17.2
+ * Version: 2.18.0
  * Author: Event Calendar Newsletter
  * Author URI: https://eventcalendarnewsletter.com/?utm_source=plugin&utm_campaign=author-link&utm_medium=link
  * Text Domain: event-calendar-newsletter
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * Requires at least: 5.8
- * Tested up to: 7.1
+ * Tested up to: 7.2
  * Requires PHP: 7.4
  */
 
@@ -43,6 +43,7 @@ require_once __DIR__ . '/includes/ecncalendarevent.class.php';
 require_once __DIR__ . '/includes/ecncalendarfeed.class.php';
 require_once __DIR__ . '/includes/ecncalendarfeedfactory.class.php';
 require_once __DIR__ . '/includes/ecnsettings.class.php';
+require_once __DIR__ . '/includes/abilities.php';
 
 // Supported plugins
 require_once __DIR__ . '/includes/ecncalendarfeedajaxcalendar.class.php';
@@ -125,6 +126,10 @@ if ( ! function_exists( 'ecn_available_pro_calendars' ) ) {
 
         if ( function_exists( 'sugar_calendar' ) ) {
             $calendars[] = 'Sugar Calendar';
+        }
+
+        if ( defined( 'EVENTKOI_VERSION' ) ) {
+            $calendars[] = 'EventKoi';
         }
 
         return $calendars;

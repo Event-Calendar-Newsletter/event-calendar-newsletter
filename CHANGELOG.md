@@ -1,6 +1,34 @@
 Changelog
 =========
 
+v2.18.0 - 2026-11-26
+--------------------
+
+##### New Features
+
++ Added WordPress Abilities API support (WordPress 6.9+) so AI agents can list calendars and format tags and generate newsletter events.
+
+##### Bug Fixes
+
++ Fixed the email opt-in notice.
+
+
+v2.17.3 - 2026-09-02
+--------------------
+
+##### New Features
+
++ Adding note about EventKoi support.
+
+##### Updates and Enhancements
+
++ Avoid translations of product name and deactivation reason keys.
+
+##### Bug Fixes
+
++ Fixed position of deactivation survey modal on short plugins list.
+
+
 v2.17.2 - 2026-08-23
 --------------------
 
