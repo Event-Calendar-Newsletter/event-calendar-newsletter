@@ -1,0 +1,3 @@
+significance: patch
+type: fixed
+entry: Clicking "No Thank You" on the email notice no longer shares the admin email address, and answering one plugin's email notice no longer opts in other plugins that use the same tracker.

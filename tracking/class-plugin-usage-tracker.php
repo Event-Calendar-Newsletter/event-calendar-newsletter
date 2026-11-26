@@ -881,11 +881,13 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
          */
         public function marketing_notice() {
             // Check if user has opted in to marketing
-            if ( isset( $_GET['marketing_optin'] ) ) {
-                // Set marketing optin
-                $this->set_can_collect_email( sanitize_text_field( $_GET['marketing_optin'] ), $this->plugin_name );
-                // Do tracking
-                $this->do_tracking( true );
+            // Only the notice for this plugin records its answer, and only an explicit "yes" is consent.
+            if ( isset( $_GET['marketing_optin'], $_GET['plugin'] ) ) {
+                if ( $_GET['plugin'] === $this->plugin_name ) {
+                    $this->set_can_collect_email( 'yes' === $_GET['marketing_optin'], $this->plugin_name );
+                    // Do tracking
+                    $this->do_tracking( true );
+                }
             } elseif ( isset( $_GET['marketing'], $_GET['plugin'] ) && $_GET['marketing'] === 'yes' && $_GET['plugin'] === $this->plugin_name ) {
                 // Display the notice requesting permission to collect email address
                 // Retrieve current plugin information
