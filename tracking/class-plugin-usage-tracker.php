@@ -277,6 +277,12 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
             // Collect the email if the correct option has been set
             if ( $this->get_can_collect_email() ) {
                 $body['email'] = $this->get_admin_email();
+
+                // Unix time the admin clicked "Yes Please", sent only for explicit consent
+                $consent = get_option( 'wisdom_marketing_consent', [] );
+                if ( isset( $consent[$this->plugin_name] ) ) {
+                    $body['marketing_consent'] = $consent[$this->plugin_name];
+                }
             }
             $body['marketing_method'] = $this->marketing;
 
@@ -909,7 +915,18 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
             // Only the notice for this plugin records its answer, and only an explicit "yes" is consent.
             if ( isset( $_GET['marketing_optin'], $_GET['plugin'] ) ) {
                 if ( $_GET['plugin'] === $this->plugin_name ) {
-                    $this->set_can_collect_email( 'yes' === $_GET['marketing_optin'], $this->plugin_name );
+                    $consented = 'yes' === $_GET['marketing_optin'];
+                    $this->set_can_collect_email( $consented, $this->plugin_name );
+
+                    // Record when the admin said yes, so the tracking server can tell explicit consent apart.
+                    $consent = get_option( 'wisdom_marketing_consent', [] );
+                    if ( $consented ) {
+                        $consent[$this->plugin_name] = time();
+                    } else {
+                        unset( $consent[$this->plugin_name] );
+                    }
+                    update_option( 'wisdom_marketing_consent', $consent );
+
                     // Do tracking
                     $this->do_tracking( true );
                 }
