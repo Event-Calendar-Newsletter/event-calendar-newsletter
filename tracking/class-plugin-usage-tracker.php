@@ -860,11 +860,14 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
                     // Option 2 enables a second notice that fires after the user opts in to tracking
                     $yes_args['marketing'] = 'yes';
                 }
-                $url_yes = add_query_arg( $yes_args );
+                // Start from the current URL without answers to earlier notices, so an answer
+                // given for another plugin is not carried into this plugin's links.
+                $base_url = remove_query_arg( [ 'plugin', 'plugin_action', 'marketing', 'marketing_optin' ] );
+                $url_yes = add_query_arg( $yes_args, $base_url );
                 $url_no = add_query_arg( [
                     'plugin' => $this->plugin_name,
                     'plugin_action' => 'no',
-                ] );
+                ], $base_url );
 
                 // Decide on notice text
                 if ( $this->marketing != 1 ) {
@@ -916,14 +919,15 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
                 $plugin = $this->plugin_data();
                 $plugin_name = $plugin['Name'];
 
+                $base_url = remove_query_arg( [ 'plugin', 'plugin_action', 'marketing', 'marketing_optin' ] );
                 $url_yes = add_query_arg( [
                     'plugin' => $this->plugin_name,
                     'marketing_optin' => 'yes',
-                ] );
+                ], $base_url );
                 $url_no = add_query_arg( [
                     'plugin' => $this->plugin_name,
                     'marketing_optin' => 'no',
-                ] );
+                ], $base_url );
 
                 $marketing_text = __( 'Would you like occasional emails with tips, new features and special offers, including discounts on our Pro plugins?', 'event-calendar-newsletter' );
                 $marketing_text = apply_filters( 'wisdom_marketing_text_' . esc_attr( $this->plugin_name ), $marketing_text ); ?>
