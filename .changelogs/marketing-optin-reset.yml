@@ -1,0 +1,3 @@
+significance: patch
+type: fixed
+entry: Email consent saved by earlier versions is cleared once, because those versions saved it for "No Thank You" too.

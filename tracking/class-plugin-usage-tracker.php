@@ -95,6 +95,8 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
         }
 
         public function init() {
+            $this->reset_email_consent();
+
             // Check marketing
             if ( $this->marketing == 3 ) {
                 $this->set_can_collect_email( true, $this->plugin_name );
@@ -712,6 +714,26 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
                 }
             }
             update_option( 'wisdom_collect_email', $collect_email );
+        }
+
+        /**
+         * Clear email consent stored before "No Thank You" was handled correctly, once per plugin
+         *
+         * Earlier versions stored consent for both "Yes Please" and "No Thank You", so a stored
+         * consent cannot be trusted and usage pings stop including the admin email.
+         *
+         * @since [version]
+         */
+        public function reset_email_consent() {
+            $reset = get_option( 'wisdom_collect_email_reset', [] );
+
+            if ( isset( $reset[$this->plugin_name] ) ) {
+                return;
+            }
+
+            $this->set_can_collect_email( false, $this->plugin_name );
+            $reset[$this->plugin_name] = time();
+            update_option( 'wisdom_collect_email_reset', $reset );
         }
 
         /**
