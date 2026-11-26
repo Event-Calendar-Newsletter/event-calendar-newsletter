@@ -883,12 +883,12 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
                 // And we allow you to filter the text anyway
                 $notice_text = apply_filters( 'wisdom_notice_text_' . esc_attr( $this->plugin_name ), $notice_text ); ?>
 
-				<div class="notice notice-info updated put-dismiss-notice">
+				<div class="notice notice-info put-dismiss-notice">
 					<p><?php echo '<strong>' . esc_html( $plugin_name ) . '</strong>'; ?></p>
 					<p><?php echo esc_html( $notice_text ); ?></p>
 					<p>
-						<a href="<?php echo esc_url( $url_yes ); ?>" class="button-secondary"><?php _e( 'Allow', 'event-calendar-newsletter' ); ?></a>
-						<a href="<?php echo esc_url( $url_no ); ?>" class="button-secondary"><?php _e( 'Do Not Allow', 'event-calendar-newsletter' ); ?></a>
+						<a href="<?php echo esc_url( $url_yes ); ?>" class="button button-primary"><?php _e( 'Allow', 'event-calendar-newsletter' ); ?></a>
+						<a href="<?php echo esc_url( $url_no ); ?>" class="button"><?php _e( 'Do Not Allow', 'event-calendar-newsletter' ); ?></a>
 					</p>
 				</div>
 			<?php
@@ -925,18 +925,26 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
                     'marketing_optin' => 'no',
                 ] );
 
-                $marketing_text = sprintf(
-                    __( 'Thank you for opting in to tracking. Would you like to receive occasional news about this %s, including details of new features and special offers?', 'event-calendar-newsletter' ),
-                    $this->what_am_i
-                );
+                $marketing_text = __( 'Would you like occasional emails with tips, new features and special offers, including discounts on our Pro plugins?', 'event-calendar-newsletter' );
                 $marketing_text = apply_filters( 'wisdom_marketing_text_' . esc_attr( $this->plugin_name ), $marketing_text ); ?>
 
-				<div class="notice notice-info updated put-dismiss-notice">
+				<div class="notice notice-info put-dismiss-notice">
 					<p><?php echo '<strong>' . esc_html( $plugin_name ) . '</strong>'; ?></p>
 					<p><?php echo esc_html( $marketing_text ); ?></p>
 					<p>
-						<a href="<?php echo esc_url( $url_yes ); ?>" data-putnotice="yes" class="button-secondary"><?php _e( 'Yes Please', 'event-calendar-newsletter' ); ?></a>
-						<a href="<?php echo esc_url( $url_no ); ?>" data-putnotice="no" class="button-secondary"><?php _e( 'No Thank You', 'event-calendar-newsletter' ); ?></a>
+						<a href="<?php echo esc_url( $url_yes ); ?>" data-putnotice="yes" class="button button-primary"><?php _e( 'Yes Please', 'event-calendar-newsletter' ); ?></a>
+						<a href="<?php echo esc_url( $url_no ); ?>" data-putnotice="no" class="button"><?php _e( 'No Thank You', 'event-calendar-newsletter' ); ?></a>
+					</p>
+					<p class="description">
+						<?php
+						printf(
+							/* translators: 1: email address, 2: opening privacy policy link tag, 3: closing link tag */
+							esc_html__( 'Sent to %1$s by Event Calendar Newsletter (7184948 Canada Inc). Unsubscribe at any time from any email. %2$sPrivacy policy%3$s', 'event-calendar-newsletter' ),
+							'<strong>' . esc_html( $this->get_admin_email() ? $this->get_admin_email() : wp_get_current_user()->user_email ) . '</strong>',
+							'<a href="https://eventcalendarnewsletter.com/privacy/" target="_blank">',
+							'</a>'
+						);
+						?>
 					</p>
 				</div>
 				<?php
