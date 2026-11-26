@@ -938,9 +938,11 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
 					<p class="description">
 						<?php
 						printf(
-							/* translators: 1: email address, 2: opening privacy policy link tag, 3: closing link tag */
-							esc_html__( 'Sent to %1$s by Event Calendar Newsletter (7184948 Canada Inc). Unsubscribe at any time from any email. %2$sPrivacy policy%3$s', 'event-calendar-newsletter' ),
+							/* translators: 1: email address, 2: mailing address, 3: contact email address, 4: opening privacy policy link tag, 5: closing link tag */
+							esc_html__( 'Sent to %1$s by Event Calendar Newsletter (7184948 Canada Inc), %2$s, %3$s. Unsubscribe at any time from any email. %4$sPrivacy policy%5$s', 'event-calendar-newsletter' ),
 							'<strong>' . esc_html( $this->get_admin_email() ? $this->get_admin_email() : wp_get_current_user()->user_email ) . '</strong>',
+							'222 Main Street East, North Bay, ON, P1B 1B1, Canada',
+							'info@eventcalendarnewsletter.com',
 							'<a href="https://eventcalendarnewsletter.com/privacy/" target="_blank">',
 							'</a>'
 						);
