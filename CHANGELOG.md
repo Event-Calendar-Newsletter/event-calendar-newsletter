@@ -1,6 +1,18 @@
 Changelog
 =========
 
+v2.18.0 - 2026-11-26
+--------------------
+
+##### New Features
+
++ Added WordPress Abilities API support (WordPress 6.9+) so AI agents can list calendars and format tags and generate newsletter events.
+
+##### Bug Fixes
+
++ Fixed the email opt-in notice.
+
+
 v2.17.3 - 2026-09-02
 --------------------
 

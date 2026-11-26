@@ -728,7 +728,7 @@ if ( ! class_exists( 'ECN_Plugin_Usage_Tracker' ) ) {
          * Earlier versions stored consent for both "Yes Please" and "No Thank You", so a stored
          * consent cannot be trusted and usage pings stop including the admin email.
          *
-         * @since [version]
+         * @since 2.18.0
          */
         public function reset_email_consent() {
             $reset = get_option( 'wisdom_collect_email_reset', [] );

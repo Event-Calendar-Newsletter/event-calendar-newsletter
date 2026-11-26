@@ -6,7 +6,7 @@
  * Lets AI agents and other tools discover the supported calendars and format tags, and generate
  * newsletter-ready HTML for upcoming events, the same as the Event Calendar Newsletter admin page.
  *
- * @since [version]
+ * @since 2.18.0
  */
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
@@ -16,7 +16,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
      *
      * Uses the same capability as the Event Calendar Newsletter admin page.
      *
-     * @since [version]
+     * @since 2.18.0
      *
      * @return bool
      */
@@ -27,7 +27,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
     /**
      * Load what the calendar feeds need to detect their plugins outside of wp-admin, such as in REST requests.
      *
-     * @since [version]
+     * @since 2.18.0
      */
     function ecn_abilities_prepare_feeds() {
         if ( ! function_exists( 'is_plugin_active' ) ) {
@@ -38,7 +38,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
     /**
      * Available designs, keyed by the value of the "design" setting.
      *
-     * @since [version]
+     * @since 2.18.0
      *
      * @return array<string,string>
      */
@@ -46,7 +46,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
         /*
          * Filters the designs available for the "design" setting.
          *
-         * @since [version]
+         * @since 2.18.0
          *
          * @param array<string,string> $designs Design value => label.
          */
@@ -60,7 +60,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
     /**
      * Available ways to group events, keyed by the value of the "group_events" setting.
      *
-     * @since [version]
+     * @since 2.18.0
      *
      * @return array<string,string>
      */
@@ -68,7 +68,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
         /*
          * Filters the values available for the "group_events" setting.
          *
-         * @since [version]
+         * @since 2.18.0
          *
          * @param array<string,string> $options Group events value => label.
          */
@@ -83,7 +83,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
      * These are the same fields as the form on the Event Calendar Newsletter admin page. Calendar-specific
      * filters (such as categories) are passed through as additional properties.
      *
-     * @since [version]
+     * @since 2.18.0
      *
      * @return array
      */
@@ -91,7 +91,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
         /*
          * Filters the JSON schema properties of the newsletter settings accepted by the abilities.
          *
-         * @since [version]
+         * @since 2.18.0
          *
          * @param array $properties JSON schema properties.
          */
@@ -124,7 +124,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
     /**
      * Fill in defaults for settings passed to an ability.
      *
-     * @since [version]
+     * @since 2.18.0
      *
      * @param array $settings settings passed to the ability
      *
@@ -147,7 +147,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
     /**
      * Register the Event Calendar Newsletter ability category.
      *
-     * @since [version]
+     * @since 2.18.0
      */
     function ecn_register_ability_category() {
         wp_register_ability_category( 'event-calendar-newsletter', [
@@ -160,7 +160,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
     /**
      * Register the Event Calendar Newsletter abilities.
      *
-     * @since [version]
+     * @since 2.18.0
      */
     function ecn_register_abilities() {
         wp_register_ability( 'event-calendar-newsletter/get-calendars', [
@@ -283,7 +283,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
     /**
      * Execute the event-calendar-newsletter/get-calendars ability.
      *
-     * @since [version]
+     * @since 2.18.0
      *
      * @return array
      */
@@ -308,7 +308,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
     /**
      * Execute the event-calendar-newsletter/get-format-options ability.
      *
-     * @since [version]
+     * @since 2.18.0
      *
      * @param array|null $input ability input
      *
@@ -332,7 +332,7 @@ if ( ! function_exists( 'ecn_abilities_user_can_manage' ) ) {
     /**
      * Execute the event-calendar-newsletter/generate-newsletter ability.
      *
-     * @since [version]
+     * @since 2.18.0
      *
      * @param array $input newsletter settings
      *
