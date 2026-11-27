@@ -48,6 +48,7 @@
             "gulpfile.js",
             "node_modules",
             "packages",
+            "bin",
             "tests",
             "tmp",
             "i18n",
